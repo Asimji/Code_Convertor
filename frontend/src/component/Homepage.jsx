@@ -16,26 +16,26 @@ const Homepage = () => {
             language
           }
 
-          fetch(`http://localhost:8080/convert`,{
+          fetch(`${process.env.REACT_APP_URL}/convert`,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
             },
             body:JSON.stringify(obj)
-          }).then(res=>res.json()).then((res)=>{console.log(res);setOutput(res.data)}).catch(e=>console.log(e))
+          }).then(res=>res.json()).then((res)=>{setOutput(res.data)}).catch(e=>console.log(e))
       }
 
       const handleDebug=()=>{
-        fetch(`http://localhost:8080/debug`,{
+        fetch(`${process.env.REACT_APP_URL}/debug`,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
             },
             body:JSON.stringify({code:editor})
-          }).then(res=>res.json()).then((res)=>{console.log(res);setOutput(res.data)}).catch(e=>console.log(e))
+          }).then(res=>res.json()).then((res)=>{setOutput(res.data)}).catch(e=>console.log(e))
       }
       const handleQuality=()=>{
-        fetch(`http://localhost:8080/quality`,{
+        fetch(`${process.env.REACT_APP_URL}/quality`,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
@@ -48,8 +48,8 @@ const Homepage = () => {
   
 
   return (
-    <Box>
-      <Flex justify={'space-around'} gap={'10vh'}>
+    <Box >
+      <Flex justify={'space-around'} gap={'10vh'} mt="5vh" direction={{xl:'row',base:'column'}}>
         <Select w={'30vh'} onChange={(e)=>setLanguage(e.target.value)}>
             <option value="java">Java</option>
             <option value="javascript">JavaScript</option>
@@ -61,16 +61,24 @@ const Homepage = () => {
         <Button w={'30vh'} onClick={handleDebug}> Debug</Button>
         <Button w={'30vh'} onClick={handleQuality}>Quality Check</Button>
       </Flex>
-      <Flex mt={'5vh'} >
+        
+      <Flex  m={'5vh 7vh 0 7vh'}  >
+      
         <Editor
         theme='vs-dark'
-        width={'50%'}
+        width={'40%'}
         height={'80vh'}
         onChange={handleEditorChange}
+        value={editor?editor : "// Write your Code Here 👇"}
         />
-        <Box bg={'#1E1E1E'} w='50%' h={'80vh'}  color={'white'}>
-      {output}   
-        </Box>
+      
+      
+      <Editor
+       theme='vs-dark'
+       width={'60%'}
+       height={'80vh'}
+      value={output ? output : "Thank you for your patience! Your result will be ready soon.\nIn the meantime, enjoy some soothing thoughts."}
+      />
       </Flex>
     </Box>
   )
